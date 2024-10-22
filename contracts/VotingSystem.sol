@@ -80,14 +80,24 @@ contract VotingSystem {
        }
    }
 
-   function removeUser(address _user) public onlyManager {
-       require(
-           authorizedUsers[_user].role != Role.None,
-           "User does not exist"
-       );
-       delete authorizedUsers[_user];
-       emit UserRemoved(_user);
-   }
+function removeUser(address _user) public onlyManager {
+    require(
+        authorizedUsers[_user].role != Role.None,
+        "User does not exist"
+    );
+    delete authorizedUsers[_user];
+    
+    // Remove the user address from userAddresses array
+    for (uint i = 0; i < userAddresses.length; i++) {
+        if (userAddresses[i] == _user) {
+            userAddresses[i] = userAddresses[userAddresses.length - 1];
+            userAddresses.pop();
+            break;
+        }
+    }
+    emit UserRemoved(_user);
+}
+
 
    // Manager functions
    function createVote(
@@ -182,11 +192,25 @@ function getUserRole(address _user) public view returns (Role) {
 }
 
 
+function getAllUsers() public view returns (address[] memory) {
+    uint activeUserCount = 0;
+    for (uint i = 0; i < userAddresses.length; i++) {
+        if (authorizedUsers[userAddresses[i]].role != Role.None) {
+            activeUserCount++;
+        }
+    }
 
+    address[] memory activeUsers = new address[](activeUserCount);
+    uint index = 0;
+    for (uint i = 0; i < userAddresses.length; i++) {
+        if (authorizedUsers[userAddresses[i]].role != Role.None) {
+            activeUsers[index] = userAddresses[i];
+            index++;
+        }
+    }
 
-   function getAllUsers() public view returns (address[] memory) {
-       return userAddresses;
-   }
+    return activeUsers;
+}
 
    // Add a function to check user authorization for a specific vote
    function isUserAuthorized(uint256 _voteId, address _user) public view returns (bool) {
