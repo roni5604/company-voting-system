@@ -2,8 +2,8 @@
   "_format": "hh-sol-cache-2",
   "files": {
     "/Users/michaeli/Desktop/final/company-voting-system/contracts/VotingSystem.sol": {
-      "lastModificationDate": 1729615046294,
-      "contentHash": "54459e3bce70624fa1d041fa73a81d94",
+      "lastModificationDate": 1729785257854,
+      "contentHash": "348e1e367560193d0384ca2945ed154d",
       "sourceName": "contracts/VotingSystem.sol",
       "solcConfig": {
         "version": "0.8.27",
